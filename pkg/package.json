@@ -10,6 +10,7 @@
     "koweb.js",
     "koweb.d.ts"
   ],
-  "browser": "koweb.js",
-  "types": "koweb.d.ts"
+  "module": "koweb.js",
+  "types": "koweb.d.ts",
+  "sideEffects": false
 }

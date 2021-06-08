@@ -1,11 +1,9 @@
-let wasm_bindgen;
-(function() {
-    const __exports = {};
-    let wasm;
 
-    const heap = new Array(32).fill(undefined);
+let wasm;
 
-    heap.push(undefined, null, true, false);
+const heap = new Array(32).fill(undefined);
+
+heap.push(undefined, null, true, false);
 
 function getObject(idx) { return heap[idx]; }
 
@@ -212,18 +210,18 @@ function __wbg_adapter_28(arg0, arg1, arg2) {
 * @param {string} make_text_js
 * @returns {any}
 */
-__exports.get_graph_rust = function(make_text_js) {
+export function get_graph_rust(make_text_js) {
     var ptr0 = passStringToWasm0(make_text_js, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len0 = WASM_VECTOR_LEN;
     var ret = wasm.get_graph_rust(ptr0, len0);
     return takeObject(ret);
-};
+}
 
 /**
 * @param {string} string_js
 * @returns {string}
 */
-__exports.get_string_js = function(string_js) {
+export function get_string_js(string_js) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         var ptr0 = passStringToWasm0(string_js, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
@@ -236,13 +234,13 @@ __exports.get_string_js = function(string_js) {
         wasm.__wbindgen_add_to_stack_pointer(16);
         wasm.__wbindgen_free(r0, r1);
     }
-};
+}
 
 /**
 */
-__exports.increment_test = function() {
+export function increment_test() {
     wasm.increment_test();
-};
+}
 
 /**
 * @param {string} cmds_from_js
@@ -251,11 +249,11 @@ __exports.increment_test = function() {
 * @param {boolean} no_infer
 * @param {boolean} no_check
 */
-__exports.run_test = function(cmds_from_js, eta, no_scope, no_infer, no_check) {
+export function run_test(cmds_from_js, eta, no_scope, no_infer, no_check) {
     var ptr0 = passStringToWasm0(cmds_from_js, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len0 = WASM_VECTOR_LEN;
     wasm.run_test(ptr0, len0, eta, no_scope, no_infer, no_check);
-};
+}
 
 /**
 * @param {any} programs
@@ -266,12 +264,12 @@ __exports.run_test = function(cmds_from_js, eta, no_scope, no_infer, no_check) {
 * @param {boolean} no_check
 * @returns {any}
 */
-__exports.run_multiple = function(programs, module_to_run, eta, no_scope, no_infer, no_check) {
+export function run_multiple(programs, module_to_run, eta, no_scope, no_infer, no_check) {
     var ptr0 = passStringToWasm0(module_to_run, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len0 = WASM_VECTOR_LEN;
     var ret = wasm.run_multiple(addHeapObject(programs), ptr0, len0, eta, no_scope, no_infer, no_check);
     return takeObject(ret);
-};
+}
 
 function handleError(f, args) {
     try {
@@ -317,13 +315,7 @@ async function load(module, imports) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        let src;
-        if (typeof document === 'undefined') {
-            src = location.href;
-        } else {
-            src = document.currentScript.src;
-        }
-        input = src.replace(/\.js$/, '_bg.wasm');
+        input = new URL('koweb_bg.wasm', import.meta.url);
     }
     const imports = {};
     imports.wbg = {};
@@ -635,6 +627,5 @@ async function init(input) {
     return wasm;
 }
 
-wasm_bindgen = Object.assign(init, __exports);
+export default init;
 
-})();
