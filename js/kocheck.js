@@ -180,13 +180,6 @@ run_multiple_button.onclick = async () => {
     );
 };
 
-var test_click = document.getElementById("increment");
-test_click.onclick = () => {
-    console.log(window.editor);
-    console.log(window.editor.getModel().getValueInRange());
-    // increment_test();
-};
-
 
 var load_make = document.getElementById("load_make");
 load_make.onclick = () => {
