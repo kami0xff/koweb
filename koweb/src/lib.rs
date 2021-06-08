@@ -37,14 +37,24 @@ extern "C" {
     fn log(s: &str);
 }
 
+static mut test: i32 = 0;
+
 #[wasm_bindgen]
 pub fn get_string_js(string_js: String) -> String {
     return string_js;
 }
 
 #[wasm_bindgen()]
-pub fn hello_rust() {
-    alert("hello rust");
+pub fn increment_test() {
+    unsafe {
+        // alert(Prog::get_piece_to_koweb_static().as_str());
+        // alert(Test::test_text().as_str());
+        // alert(call_exported_rust_func().as_str());
+        // alert(Test2::test_text2().as_str()); MIME TYPE ISSUE AAA
+        // let value = js_sys::Reflect::get(&target, &property_key).expect("reflect failed");
+        alert(format!("test : {}", test).as_str());
+        test += 1;
+    }
 }
 
 fn get_text_from_editor() -> Result<String, ()> {
@@ -218,7 +228,6 @@ pub async fn run_multiple(
     no_infer: bool,
     no_check: bool,
 ) {
-    //in here try to start a web worker
     console_log::init_with_level(Level::Trace);
     init_console_wasm_debug();
     let vec_of_programs: Vec<Program> = programs.into_serde().unwrap();
@@ -278,6 +287,13 @@ async fn produce_from_fetch(dependency_url_list: Vec<(String, String)>, opt: &Op
     let vec_iter = produce_from_js_multiple(&list_text, &opt, list_module);
     let iter = vec_iter.into_iter().flat_map(|it| it);
     let mut iter = Box::new(iter).inspect(|r| r.iter().for_each(|event| write_to_webpage(event)));
+
+    //
+    //iterateur de iterateur pas de vec de iterateur
+    //utiliser flatten nested result
+    //tester si le site freeze pas
+    //structure du document headlines + estimation section
+    //
 
     seq::consume(iter, &opt).expect("something went wrong in the consume");
 }

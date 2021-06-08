@@ -1,5 +1,32 @@
+import init, {
+    run_test,
+    increment_test,
+    get_graph_rust,
+    run_multiple,
+} from "../pkg/koweb.js";
+import { Test } from "./program.js";
 
 let program_list = [];
+
+//TODO
+//1)init was at load : DONE
+//2)generate correct gitraw urls: DONE
+//3)create and set up all the program objects: DONE
+//prio) work on parse buffer and getting the string data to rust !
+//4)based on what is available generate the options on what to run: LATER FIRST TRY TO GET DATA TO RUST
+//5)Try running a .dk that requires dependencies and see what is the output:
+//6)Try to load a hard .mk file like given previously
+
+//si je passe les urls a rust ? direct peut etre c'est mieux
+
+//7)Check if it is possible to fetch bit by bit in JS https://api.video/blog/tutorials/uploading-large-files-with-javascript file and blob api like video split things in segments
+//https://nordicapis.com/everything-you-need-to-know-about-api-pagination/ interesting stuff here for this and maybe the fetch can all be done in rust that would be quite cool
+//then i don't even need to pass strings from js to rust. and the problem is solved
+
+//attends donc peut etre enfait ce que je vais faire c'est utiliser webpack enfait mais je ferais ca vers la fin
+
+//still first the right urls have to be made and the program also
+//first investigate the two way
 
 class Program {
     constructor(name, dependency, dependency_url_list, raw_url) {
@@ -8,6 +35,12 @@ class Program {
         this.dependency_url_list = dependency_url_list;
         this.raw_url = raw_url;
     }
+
+    static get_piece_of_text(buffer_size) {
+        return this.text.slice(buffer_size, this.text.length - 1);
+    }
+    //get bit of string function that will need to be passed to rust ?
+    //
 }
 
 function remove_all_outputs_dom() {
@@ -71,6 +104,7 @@ function run_program_from_url(context_id) {
                     .then((string) => {
                         console.log(
                             "THIS IS THE STRING WE RUN FROM THE URL :: ",
+                            string
                         );
                         run(string);
                     })
@@ -115,6 +149,12 @@ async function run(program = undefined) {
     remove_all_outputs_dom();
     // await init();
     var testing = await window.editor.getValue();
+    const prog = new Program(testing, "pipo", "toto");
+    // console.log(prog);
+    //si la classe casse trop les couilles je peut faire une closure mais je pense la classes c'est bien
+
+    // prog.go_through_iterator();
+    // prog.get_piece_to_koweb();
 
     if (program === undefined) {
         run_test(
@@ -134,11 +174,12 @@ async function run(program = undefined) {
             document.getElementById("no_check").checked
         );
     }
+    // } catch {
+    //     remove_all_errors_dom();
+    //     display_error_dom("something went wrong in the kontroli run", "errors");
+    // }
 }
 
-
-//i have to use the functions that i will define in index.html
-//here
 var load_url = (document.getElementById("load_url").onclick = () => {
     load_program_from_url("errors");
 });
@@ -155,68 +196,96 @@ run_button.onclick = async () => {
 
 var run_multiple_button = document.getElementById("run_multiple");
 run_multiple_button.onclick = async () => {
-
-    const module_to_run = document.getElementById("file_to_run").value;
-    const worker_run_multiple = new Worker('/js/worker_run_multiple.js', {type: 'module'});
-
-    worker_run_multiple.postMessage({
-        program_list: program_list,
-        module_to_run: module_to_run,
-        eta: document.getElementById("eta").checked,
-        no_scope: document.getElementById("no_scope").checked,
-        no_infer: document.getElementById("no_infer").checked,
-        no_check: document.getElementById("no_check").checked
-    });
-
-    worker_run_multiple.onmessage = function(event) {
-        const message_type = event.data.message_type;
-        const value = event.data.value;
-
-        console.log("Message type: ", message_type)
-        console.log("Message type: ", value)
-
-        if(message_type === "output"){
-            write_output_html(value);
-        }
-        else if (message_type === "header"){
-            write_header_html(value);
-        }
-        else if (message_type === "done"){
-            write_done_html();
-            worker_run_multiple.terminate();
-        }
-        else {
-            console.log("unknown message from worker in run_multiple()")
-        }
-    }
-
-    worker_run_multiple.onerror = function(event){
-        throw new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
-    };
-
+    // if the program_list is empty and this is clicked show some error message
+    let module_to_run = document.getElementById("file_to_run").value;
+    await run_multiple(
+        program_list,
+        module_to_run,
+        document.getElementById("eta").checked,
+        document.getElementById("no_scope").checked,
+        document.getElementById("no_infer").checked,
+        document.getElementById("no_check").checked
+    );
 };
 
+var test_click = document.getElementById("increment");
+test_click.onclick = () => {
+    console.log(window.editor);
+    console.log(window.editor.getModel().getValueInRange());
+    // increment_test();
+};
+
+//TODO
+//now the wasm is compiling
+//try import the new function
+//try run it here on the make button
+//see if i can console.log the output if i can that would be great i then just need to adapt the code in the parse.js
+//and do everything in this onclick i guess
+//1 user clicks
+//2 gets the make string from url
+//3 passes the maek string to rust
+//4 rust returns everything
+// -> generate gitraw urls for each file that we might need
+//5 generate html and css for the modules
+//6 store the information returned by rust permanently somehow
+// -> when clicking on the file name it will do a fetch for its raw url but how can i determine how large it is whilst fetching
+// -> using a HEAD Request ???
+//7 enable the possibility to load the files in the editor WITH WARNING IF THE FIlE IS TOO LARGE <--- GOAL FOR TODAY
+
+//8 create a program queue and a program class make the parse buffer work and the passing of string data to the parse buffer
+//take and give
+//9 add the possibility for run to run mulitiple files
+
+//TODO IMPORTANT FOR UNDERSTANDING AND PRESENTATION / WRITTING PAPER
+//make a little comparison program for sieves of primes to see what gains in performance can be obtained with wasm (talk about the use of the sieves prime for cpu tests)
+//understand how javascript function are passed to rust
+//understand how rust gets transpiled to wasm
+//how is the wasm executed with regards to javascript
+//talk about async programing and why wasm needs to be loaded async
+// you need to get to the mulithreading part i want to talk about if it is possible or not to do multithreading and why not or why it is
+
+//1) generate the gitraw urls that i will need
+//2) put everything in the mem instance
+//3) make the html graph once that is done
+//3) implement the program queue and the program class
+//4)
 
 var load_make = document.getElementById("load_make");
 load_make.onclick = () => {
-    const url = document.getElementById("urlmake").value;
-    // const text = fetch_make_text_from_url(url);
-    console.log("url in main ", url)
-    const worker_graph = new Worker('/js/worker_graph.js', {type: 'module'});
-    worker_graph.postMessage({type: "args", value: url})
-
-    worker_graph.onmessage = function(event) {
-        console.log("final result from the worker : ", event.data);
-        worker_graph.terminate();
-        use_graph_data(event.data)
-    }
-
-    worker_graph.onerror = function(event){
-        throw new Error(event.message + " (" + event.filename + ":" + event.lineno + ")");
-    };
-
+    fetch_make_text_from_url();
 };
-
+// const url = "https://raw.githubusercontent.com//bachelorproject/master/examples/kontroli.mk";
+// https://github.com/01mf02/kontroli-rs/blob/master/examples/sudoku/deps.mk
+function fetch_make_text_from_url() {
+    remove_all_errors_dom();
+    const url = document.getElementById("urlmake").value; //continue here
+    console.log(url);
+    if (url != "") {
+        fetch(url)
+            .then(check_fetch)
+            .then((result) => {
+                result
+                    .text() //if the string is 404 not found
+                    .then((string) => {
+                        console.log(
+                            "THIS IS THE MAKE STRING WE GOT FROM :: ",
+                            string
+                        );
+                        use_graph_data(get_graph_rust(string)); //donc ici je vais utiliser un fonction rust qui permetra de get let dependences
+                    }) //here we need to call the get dep from rust then we can generate the html and the css from it and the raw urls
+                    .catch((err) => {
+                        console.log("ERROR :", err);
+                        display_error_dom(err, "errors");
+                    });
+            })
+            .catch((err) => {
+                console.log("ERROR :", err);
+                // display_error_dom(err, context_id);
+            });
+    } else {
+        display_error_dom("Empty url field", "errors");
+    }
+}
 
 function use_graph_data(graph_data) {
     const dependency_list = graph_data;
@@ -358,9 +427,11 @@ function generate_gitraw_urls(list_of_files) {
     return result_list;
 }
 
-
+// TODO fix this i think
+// TODO i should only display run selected module when tehre is something loaded or display a message like nothing was loaded
 function dependencies_as_urls(graph_data, urls) {
-
+    // console.log("DEBUG DEPENDENCY AS URL");
+    // let counter = 0;
     let dep_url_list_list = [];
     for (let node of graph_data) {
         let dep_url_list = generate_gitraw_urls(node[1]);
@@ -382,53 +453,4 @@ function save_to_program_list(graph_data, urls, dependency_url_list) {
         );
     }
     console.log("PROGRAM LIST : ", program_list);
-}
-
-
-
-function write_header_html(module_name){
-    let div = document.createElement("div");
-    let text = document.createElement("p");
-    let header_span = document.createElement("span");
-    header_span.className = "header_output";
-    header_span.textContent = "#> ";
-    text.className = "line";
-    text.textContent = module_name;
-    div.className = "prompt";
-    div.appendChild(header_span);
-    div.appendChild(text);
-    let output = document.getElementById("output");
-    output.className = "display_output";
-    output.appendChild(div);
-}
-
-
-function write_output_html(kontroli_event_text){
-    let div = document.createElement("div");
-    let text = document.createElement("p");
-    let lambda_span = document.createElement("span");
-    lambda_span.className = "lambda";
-    lambda_span.textContent = "λ> ";
-    text.className = "line";
-    text.textContent = kontroli_event_text;
-    div.setClassName = "prompt";
-    div.appendChild(lambda_span);
-    div.appendChild(text);
-    let output = document.getElementById("output");
-    output.className = "display_output";
-    output.appendChild(div);
-
-}
-
-
-function write_done_html(){
-    let div = document.createElement("div");
-    let lambda_span = document.createElement("span");
-    lambda_span.className = "lambda";
-    lambda_span.textContent = "v/DONE";
-    div.setClassName = "prompt";
-    div.appendChild(lambda_span);
-    let output = document.getElementById("output");
-    output.className = "display_output";
-    output.appendChild(div);
 }
