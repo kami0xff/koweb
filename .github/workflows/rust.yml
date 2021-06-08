@@ -25,7 +25,7 @@ jobs:
       #   run: cargo test
       - name: Build wasm
         working-directory: ./koweb
-        run: wasm-pack build --out-dir "www/pkg" --target no-modules
+        run: wasm-pack build --out-dir "www/pkg" --target web
 
       - name: Remove File
         uses: JesseTG/rm@v1.0.2
