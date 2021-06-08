@@ -69,10 +69,7 @@
             <button id="run_multiple" class="btn green">Run Selected Module</button>
             <label for="file_to_run">Chose module to run</label>
             <select name="file_to_run" id="file_to_run">
-                <!-- so these options should be generated when i create the modules -->
-                <!-- then the chose file to run should be passed to rust so that the right thing is run -->
             </select>
-            <button id="increment">test</button>
         </div>
 
         <div id="errors">
@@ -91,22 +88,10 @@
 
     </div>
 
-    <!-- PARSER FOR MAKEFILES WILL ONLY WORK WITH .mk FORMAT ONLINE RAW FILES -->
-    <!-- 1) split the string in what matters we won't care about flags --x -->
-    <!-- 2) keep names and filenames in the array -->
-    <!-- 3) generate the raw github urls for each file -->
-    <!-- 4) fetch data from each of those files then store it somewhere perhaps on the generated html idk this step hmmm make some global constant with a promise and these file values or something -->
-    <!-- 5) on file name click it puts the content of the file in the editor -->
-    <!--  -->
-
-
-    <!-- <script type="module" src="./pkg/koweb.js"></script>  -->
     <script type="module" src="./js/init_wasm.js"></script>
     <script src="./monaco/min/vs/loader.js"></script>
     <script src="./js/editor.js"></script>
-    <!-- <script type="module" src="./js/program.js" defer></script> -->
     <script type="module" src="./js/kocheck.js" defer></script>
-    <!-- <script src="js/parsemake.js" defer></script> -->
 
 </body>
 
