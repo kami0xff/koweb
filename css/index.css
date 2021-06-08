@@ -126,9 +126,6 @@ ul {
     visibility: visible !important;
 }
 
-
-.prompt{}
-
 .error {
     text-align: center;
     background-color: #ff6961;
