@@ -4,29 +4,9 @@ import init, {
     get_graph_rust,
     run_multiple,
 } from "../pkg/koweb.js";
-import { Test } from "./program.js";
 
 let program_list = [];
 
-//TODO
-//1)init was at load : DONE
-//2)generate correct gitraw urls: DONE
-//3)create and set up all the program objects: DONE
-//prio) work on parse buffer and getting the string data to rust !
-//4)based on what is available generate the options on what to run: LATER FIRST TRY TO GET DATA TO RUST
-//5)Try running a .dk that requires dependencies and see what is the output:
-//6)Try to load a hard .mk file like given previously
-
-//si je passe les urls a rust ? direct peut etre c'est mieux
-
-//7)Check if it is possible to fetch bit by bit in JS https://api.video/blog/tutorials/uploading-large-files-with-javascript file and blob api like video split things in segments
-//https://nordicapis.com/everything-you-need-to-know-about-api-pagination/ interesting stuff here for this and maybe the fetch can all be done in rust that would be quite cool
-//then i don't even need to pass strings from js to rust. and the problem is solved
-
-//attends donc peut etre enfait ce que je vais faire c'est utiliser webpack enfait mais je ferais ca vers la fin
-
-//still first the right urls have to be made and the program also
-//first investigate the two way
 
 class Program {
     constructor(name, dependency, dependency_url_list, raw_url) {
@@ -150,11 +130,6 @@ async function run(program = undefined) {
     // await init();
     var testing = await window.editor.getValue();
     const prog = new Program(testing, "pipo", "toto");
-    // console.log(prog);
-    //si la classe casse trop les couilles je peut faire une closure mais je pense la classes c'est bien
-
-    // prog.go_through_iterator();
-    // prog.get_piece_to_koweb();
 
     if (program === undefined) {
         run_test(
@@ -174,10 +149,7 @@ async function run(program = undefined) {
             document.getElementById("no_check").checked
         );
     }
-    // } catch {
-    //     remove_all_errors_dom();
-    //     display_error_dom("something went wrong in the kontroli run", "errors");
-    // }
+
 }
 
 var load_url = (document.getElementById("load_url").onclick = () => {
@@ -215,40 +187,6 @@ test_click.onclick = () => {
     // increment_test();
 };
 
-//TODO
-//now the wasm is compiling
-//try import the new function
-//try run it here on the make button
-//see if i can console.log the output if i can that would be great i then just need to adapt the code in the parse.js
-//and do everything in this onclick i guess
-//1 user clicks
-//2 gets the make string from url
-//3 passes the maek string to rust
-//4 rust returns everything
-// -> generate gitraw urls for each file that we might need
-//5 generate html and css for the modules
-//6 store the information returned by rust permanently somehow
-// -> when clicking on the file name it will do a fetch for its raw url but how can i determine how large it is whilst fetching
-// -> using a HEAD Request ???
-//7 enable the possibility to load the files in the editor WITH WARNING IF THE FIlE IS TOO LARGE <--- GOAL FOR TODAY
-
-//8 create a program queue and a program class make the parse buffer work and the passing of string data to the parse buffer
-//take and give
-//9 add the possibility for run to run mulitiple files
-
-//TODO IMPORTANT FOR UNDERSTANDING AND PRESENTATION / WRITTING PAPER
-//make a little comparison program for sieves of primes to see what gains in performance can be obtained with wasm (talk about the use of the sieves prime for cpu tests)
-//understand how javascript function are passed to rust
-//understand how rust gets transpiled to wasm
-//how is the wasm executed with regards to javascript
-//talk about async programing and why wasm needs to be loaded async
-// you need to get to the mulithreading part i want to talk about if it is possible or not to do multithreading and why not or why it is
-
-//1) generate the gitraw urls that i will need
-//2) put everything in the mem instance
-//3) make the html graph once that is done
-//3) implement the program queue and the program class
-//4)
 
 var load_make = document.getElementById("load_make");
 load_make.onclick = () => {
