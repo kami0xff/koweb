@@ -22,10 +22,10 @@ jobs:
           version: "latest"
 
       # - name: Run test
-      #   run: cargo test
+      # -  run: cargo test
       - name: Build wasm
         working-directory: ./koweb
-        run: wasm-pack build --out-dir "www/pkg" --target web
+        run: wasm-pack build --out-dir "www/pkg" --target web --release
 
       - name: Remove File
         uses: JesseTG/rm@v1.0.2
