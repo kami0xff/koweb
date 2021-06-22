@@ -229,7 +229,7 @@ pub async fn run_multiple(
     no_check: bool,
 ) {
     // console_log::init_with_level(Level::Trace);
-    init_console_wasm_debug();
+    // init_console_wasm_debug();
     let vec_of_programs: Vec<Program> = programs.into_serde().unwrap();
     // info!(
     //     "this is the program we want to run : {} ",
