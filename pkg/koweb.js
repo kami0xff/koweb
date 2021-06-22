@@ -363,7 +363,7 @@ async function init(input) {
         var ret = getObject(arg0);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_fetch_01d048dd000bcda1 = function(arg0) {
+    imports.wbg.__wbg_fetch_d6391b3bc62838b4 = function(arg0) {
         var ret = fetch(getObject(arg0));
         return addHeapObject(ret);
     };
