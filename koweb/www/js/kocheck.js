@@ -152,6 +152,11 @@ async function run(program = undefined) {
 
 }
 
+
+function clear_all_output(){
+    document.querySelectorAll(".prompt").forEach((e) => e.remove());
+}
+
 var load_url = (document.getElementById("load_url").onclick = () => {
     load_program_from_url("errors");
 });
@@ -169,6 +174,7 @@ run_button.onclick = async () => {
 var run_multiple_button = document.getElementById("run_multiple");
 run_multiple_button.onclick = async () => {
     // if the program_list is empty and this is clicked show some error message
+    clear_all_output();
     let module_to_run = document.getElementById("file_to_run").value;
     await run_multiple(
         program_list,
