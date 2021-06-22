@@ -154,6 +154,7 @@ async function run(program = undefined) {
 
 
 function clear_all_output(){
+    //hide the output box and remove all current output 
     document.querySelectorAll(".prompt").forEach((e) => e.remove());
 }
 
