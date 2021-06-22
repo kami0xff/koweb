@@ -228,19 +228,19 @@ pub async fn run_multiple(
     no_infer: bool,
     no_check: bool,
 ) {
-    console_log::init_with_level(Level::Trace);
-    init_console_wasm_debug();
+    // console_log::init_with_level(Level::Trace);
+    // init_console_wasm_debug();
     let vec_of_programs: Vec<Program> = programs.into_serde().unwrap();
-    info!(
-        "this is the program we want to run : {} ",
-        module_to_run.as_str()
-    );
+    // info!(
+    //     "this is the program we want to run : {} ",
+    //     module_to_run.as_str()
+    // );
     // info!("PROGRAM LIST IN RUST : {:?}", vec_of_programs);
 
     for program in vec_of_programs {
         if program.name == module_to_run {
-            info!("This is all the program info -> {:?}", program);
-            info!("Name of the Program we want to run -> {}", module_to_run);
+            // info!("This is all the program info -> {:?}", program);
+            // info!("Name of the Program we want to run -> {}", module_to_run);
             let opt = Opt {
                 eta,
                 no_scope,
@@ -267,11 +267,10 @@ pub async fn run_multiple(
 }
 
 async fn produce_from_fetch(dependency_url_list: Vec<(String, String)>, opt: &Opt) {
-    info!("got to produce");
     let mut list_text = vec![];
     let mut list_module = vec![];
     for (file_name, url) in dependency_url_list {
-        info!("running file => {}", file_name);
+        // info!("running file => {}", file_name);
         write_output_header(&file_name);
 
         let res = lazy_fetch::get_program_text(&url)
@@ -314,29 +313,3 @@ fn produce_from_js_multiple<'a>(
     }
     result
 }
-
-//enlever.dk
-//
-
-// symbol checking is performed on the address of the pointer, making them constant-time operations.
-// so the symbol that i care about is sttfa.etap
-// two different symbols pointing to equivalent strings are not equal
-// To consistently assign the same symbols to equivalent strings, you can use the Symbols type.
-
-//it looks like it stores file paths for modules does it read the files again for the symbols ??
-//Ko(Scope(UndeclaredSymbol("sttfa.etap")))
-
-//not sure now i should have modules and such
-//add module name to produce
-//i probably need to remove everything including . in the filename variable
-//pass it to produce from js
-//
-// i need module sttfa when i run sttfa.dk and then maybe i don't need to have all the files
-// loaded at once it would make sense that sttfa.etap is syntax to get stuff from the sttfa module
-//that means i need to run them one by one to make all the modules ?
-
-//hope it works this way it does not something to do with how symbols and things are stored
-//how could it not work its this .etap things that does not want to work im only calling comsume once so
-// def True :
-// sttfa.etap (sttfa.p sttfa.bool())
-//this fails and its the first line of the second file so is the first file not executed properly ?
