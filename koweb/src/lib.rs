@@ -246,7 +246,7 @@ pub async fn run_multiple(
                 no_scope,
                 no_infer,
                 no_check,
-                buffer: Byte::from_str("64MB").unwrap(),
+                buffer: Byte::from_str("1MB").unwrap(),
                 channel_capacity: None,
                 jobs: None,
                 files: vec![],
