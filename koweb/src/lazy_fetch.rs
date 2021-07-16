@@ -1,6 +1,5 @@
 // Uses reqwest::blocking::Client::head to get the Content-Length of the response.
 //
-//CA ME CASSE LE COUILLES LA GO TEST CA
 
 use error_chain::error_chain;
 use reqwest::header::{HeaderValue, CONTENT_LENGTH, RANGE};
